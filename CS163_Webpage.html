@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CS163 Group 3 – Criteo Uplift Modeling</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #f5f4ef;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    a { color: #2c5f8a; text-decoration: underline; }
+    a:hover { color: #1a3d5c; }
+
+    header {
+      background: #1a3d5c;
+      color: #fff;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 5px solid #e8a020;
+    }
+
+    header .course-tag {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #e8a020;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: normal;
+      margin-bottom: 0.4rem;
+    }
+
+    header p.subtitle {
+      font-size: 1rem;
+      color: #b0c8de;
+    }
+
+    nav {
+      background: #243b55;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #cde;
+      text-decoration: none;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.9rem;
+      font-family: Arial, sans-serif;
+      border-right: 1px solid #1a2d3f;
+      transition: background 0.15s;
+    }
+    nav a:first-child { border-left: 1px solid #1a2d3f; }
+    nav a:hover { background: #1a3d5c; color: #fff; }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    section {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    section h2 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #1a3d5c;
+      border-bottom: 2px solid #e8a020;
+      padding-bottom: 0.4rem;
+      margin-bottom: 1.1rem;
+      font-family: Arial, sans-serif;
+    }
+
+    section p { margin-bottom: 0.8rem; }
+    section p:last-child { margin-bottom: 0; }
+
+    .callout {
+      background: #eef5fb;
+      border-left: 4px solid #2c5f8a;
+      padding: 0.9rem 1.2rem;
+      border-radius: 3px;
+      font-size: 0.95rem;
+      margin-top: 0.8rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 0.8rem;
+    }
+
+    th {
+      background: #1a3d5c;
+      color: #fff;
+      text-align: left;
+      padding: 0.55rem 0.8rem;
+      font-family: Arial, sans-serif;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f5f7fa; }
+
+    ol.steps { padding-left: 1.4rem; }
+    ol.steps li { margin-bottom: 0.5rem; }
+
+    footer {
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.82rem;
+      color: #888;
+      border-top: 1px solid #ddd;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="course-tag">CS 163 &mdash; Group 3</div>
+    <h1>Criteo Uplift Modeling &amp; Analysis</h1>
+    <p class="subtitle">Predicting Treatment Effect on User Conversions Using Machine Learning</p>
+  </header>
+
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#dataset">Dataset</a>
+    <a href="#methods">Methods</a>
+    <a href="#analytics">Analytics</a>
+  </nav>
+
+  <main>
+
+    <section id="overview">
+      <h2>Project Overview</h2>
+      <p>
+        This project explores <strong>uplift modeling</strong> — a technique for estimating the
+        incremental impact of a treatment (such as an advertisement or promotion) on individual
+        user behavior. Rather than simply predicting whether a user will convert, uplift modeling
+        identifies <em>who is most likely to convert because of the treatment</em>.
+      </p>
+      <p>
+        Using the Criteo Uplift dataset, we perform exploratory data analysis, build predictive
+        models, and visualize conversion lift across user segments. Our goal is to understand
+        which users respond best to advertising and quantify the causal effect of treatment.
+      </p>
+      <div class="callout">
+        <strong>Research Question:</strong> Can we reliably estimate individual treatment effect
+        (ITE) from observational advertising data, and which user features are most predictive
+        of uplift?
+      </div>
+    </section>
+
+    <section id="dataset">
+      <h2>Dataset</h2>
+      <p>
+        We use the <strong>Criteo Uplift Modeling Dataset v2.1</strong>, a large-scale benchmark
+        dataset released by Criteo for causal inference and uplift research. It contains roughly
+        13 million rows of randomized controlled trial data from real advertising campaigns.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Source</td><td>Criteo AI Lab</td></tr>
+          <tr><td>Rows</td><td>~13,979,592</td></tr>
+          <tr><td>Features</td><td>12 anonymized numeric features (f0–f11)</td></tr>
+          <tr><td>Treatment</td><td>Binary — whether user was shown an ad</td></tr>
+          <tr><td>Outcome</td><td>Conversion (binary) and visit (binary)</td></tr>
+          <tr><td>File</td><td>criteo-uplift-v2.1.csv (stored in GCS)</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:1rem; font-size:0.88rem; color:#555;">
+        The dataset was obtained from the
+        <a href="https://ailab.criteo.com/ressources/" target="_blank" rel="noopener">Criteo AI Lab</a>.
+        All features are anonymized and pre-processed by Criteo.
+      </p>
+    </section>
+
+    <section id="methods">
+      <h2>Methods &amp; Pipeline</h2>
+      <p>Our analysis follows a standard data science workflow:</p>
+
+      <ol class="steps">
+        <li><strong>Exploratory Data Analysis (EDA)</strong> — Distribution of features, class balance of treatment and conversion, correlation analysis.</li>
+        <li><strong>Data Preprocessing</strong> — Handling missing values, normalization, train/test splitting while preserving treatment balance.</li>
+        <li><strong>Uplift Model Training</strong> — Two-model approach (separate models for treatment and control groups) and meta-learners (S-learner, T-learner).</li>
+        <li><strong>Evaluation</strong> — Uplift curve, Qini coefficient, and area under the uplift curve (AUUC) as primary metrics.</li>
+        <li><strong>Visualization &amp; Deployment</strong> — Interactive Dash dashboard deployed on Google App Engine for exploration of model outputs.</li>
+      </ol>
+
+      <div class="callout">
+        Full EDA and modeling code is available in <code>EDA.ipynb</code> in our project repository.
+      </div>
+    </section>
+
+    <section id="analytics">
+      <h2>Analytics</h2>
+      <p style="color: #888; font-style: italic;">Coming soon.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    CS 163 &mdash; Group 3 &bull; Spring 2026 &bull; Built with HTML &amp; CSS
+  </footer>
+
+</body>
+</html>
