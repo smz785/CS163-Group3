@@ -27,7 +27,8 @@ app.layout = html.Div([
         dcc.Link("Analytics", href="/analytics")
     ]),
 
-    html.Footer("CS 163 &mdash; Group 3 &bull; Spring 2026 &bull; Built with HTML &amp; CSS")
+    html.Footer("CS 163 &mdash; Group 3 &bull; Spring 2026 &bull; Built with HTML &amp; CSS"),
+    dash.page_container
 ])
 
 # Run the app
