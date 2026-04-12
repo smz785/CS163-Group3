@@ -1,0 +1,5 @@
+,treatment,visit,conversion,exposure
+treatment,1.0,0.02,0.01,0.07
+visit,0.02,1.0,0.24,0.31
+conversion,0.01,0.24,1.0,0.17
+exposure,0.07,0.31,0.17,1.0

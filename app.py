@@ -24,13 +24,15 @@ app.layout = html.Div([
         dcc.Link("Overview", href='/'),
         dcc.Link("Dataset", href='/dataset'),
         dcc.Link("Methods", href="/methods"),
-        dcc.Link("Analytics", href="/analytics")
+        dcc.Link("Analytics", href="/analytics"),
+        dcc.Link("Preliminary Results", href="preliminary_results")
     ]),
 
-    html.Footer("CS 163 &mdash; Group 3 &bull; Spring 2026 &bull; Built with HTML &amp; CSS"),
+    html.Footer("CS 163 - Group 3 • Spring 2026 • Built with HTML & CSS"),
     dash.page_container
 ])
 
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
+
