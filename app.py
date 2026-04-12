@@ -10,7 +10,7 @@ from dash import Dash, html, dcc, dash_table, dcc, callback, Output, Input
 # import functools
 
 app = Dash(__name__, use_pages=True)
-
+server = app.server
 # Minimal Dash layout so the Dash endpoints are available.
 app.layout = html.Div([
 
