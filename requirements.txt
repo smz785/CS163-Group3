@@ -4,3 +4,5 @@ pandas
 Flask
 gunicorn
 google-cloud-storage
+scikit-learn
+numpy
