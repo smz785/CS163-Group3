@@ -1,7 +1,0 @@
-FROM python:3.9
-WORKDIR /cs163_group3
-COPY ./requirements.txt /cs163_group3/requirements.txt
-RUN pip install --no-cache-dir -r /cs163_group3/requirements.txt
-COPY ./app /cs163_group3/app #update this
-EXPOSE 8080 #update this
-CMD ['python', 'run', 'app/main.py', '--port', '8080', '--host', '0.0.0.0'] #update this
