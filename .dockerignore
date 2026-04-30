@@ -1,0 +1,9 @@
+.git/
+.idea/
+__pycache__/
+*.pyc
+notebooks/
+*.pdf
+Dockerfile.txt
+app.yaml
+*.zip
