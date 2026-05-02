@@ -26,16 +26,21 @@ def get_precomputed():
     client = storage.Client()
     bucket = client.bucket(BUCKET_NAME)
 
-    def load_csv(filename):
+    def load_series(filename):
         blob = bucket.blob(filename)
-        csv_data = blob.download_as_bytes()
-        return pd.read_csv(BytesIO(csv_data), index_col=0)
+        data = blob.download_as_bytes()
+        return pd.read_csv(BytesIO(data), index_col=0).squeeze()  # → scalar-indexable Series
 
-    return{
-        "visit_rate" : pd.read_csv("precomputed/visit_rate.csv"),
-        "conversion_rate" : pd.read_csv("precomputed/conversion_rate.csv"),
-        "conv_given_visit" : pd.read_csv("precomputed/conv_given_visit.csv"),
-        "decile_df" : load_csv("precomputed/decile_uplift.csv"),
-        "qini_tbl" : load_csv("precomputed/qini_table.csv"),
-        "policy_df" : load_csv("precomputed/policy_uplift.csv")
+    def load_df(filename):
+        blob = bucket.blob(filename)
+        data = blob.download_as_bytes()
+        return pd.read_csv(BytesIO(data))            # → DataFrame
+
+    return {
+        "visit_rate":       load_series("precomputed/visit_rate.csv"),
+        "conversion_rate":  load_series("precomputed/conversion_rate.csv"),
+        "conv_given_visit": load_series("precomputed/conv_given_visit.csv"),
+        "decile_df":        load_df("precomputed/decile_uplift.csv"),
+        "qini_tbl":         load_df("precomputed/qini_table.csv"),
+        "policy_df":        load_df("precomputed/policy_table.csv"),
     }
