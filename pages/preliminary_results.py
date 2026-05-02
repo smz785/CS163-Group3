@@ -2,16 +2,18 @@ import dash
 from dash import html, dcc
 import plotly.graph_objects as go
 import pandas as pd
+from data_store import get_precomputed
 
 dash.register_page(__name__, path='/preliminary_results', name='Preliminary Results')
 
 # ── Load precomputed results (from full 14M row analysis) ─────────
-visit_rate       = pd.read_csv("precomputed/visit_rate.csv", index_col=0).squeeze()
-conversion_rate  = pd.read_csv("precomputed/conversion_rate.csv", index_col=0).squeeze()
-conv_given_visit = pd.read_csv("precomputed/conv_given_visit.csv", index_col=0).squeeze()
-decile_df        = pd.read_csv("precomputed/decile_uplift.csv")
-qini_tbl         = pd.read_csv("precomputed/qini_table.csv")
-policy_df        = pd.read_csv("precomputed/policy_table.csv")
+precomputed = get_precomputed()
+decile_df = precomputed['decile_df']
+qini_tbl  = precomputed['qini_tbl']
+policy_df = precomputed['policy_df']
+visit_rate = precomputed['visit_rate']
+conversion_rate = precomputed['conversion_rate']
+conv_given_visit = precomputed['conv_given_visit']
 
 # ── Derived values ────────────────────────────────────────────────
 v0, v1   = visit_rate.iloc[0] * 100,       visit_rate.iloc[1] * 100
