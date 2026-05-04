@@ -187,3 +187,107 @@
       border-top: 1px solid #ddd;
       font-family: Arial, sans-serif;
     }
+
+    .methods-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.method-card {
+  background: #ffffff;
+  border: 1px solid #e6edf3;
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin: 24px 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.method-card h3 {
+  margin-top: 0;
+  color: #14395b;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 18px 0;
+}
+
+.three-column {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 18px 0;
+}
+
+.mini-card {
+  background: #f7faff;
+  border-left: 4px solid #1f5f8b;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.quote-box {
+  background: #eef6ff;
+  border-left: 5px solid #1f5f8b;
+  padding: 16px 20px;
+  margin: 18px 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.formula-box {
+  background: #f2f7ff;
+  border: 1px solid #cfe0f5;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 18px 0;
+  font-family: monospace;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.bin-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.bin-pill {
+  background: #edf5ff;
+  border: 1px solid #cfe0f5;
+  border-radius: 999px;
+  padding: 10px 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tree-diagram {
+  background: #0f172a;
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  overflow-x: auto;
+  font-family: monospace;
+  line-height: 1.35;
+}
+
+.callout {
+  background: #eaf4ff;
+  border-left: 5px solid #1f5f8b;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 28px 0;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 800px) {
+  .two-column,
+  .three-column,
+  .bin-grid {
+    grid-template-columns: 1fr;
+  }
+}
