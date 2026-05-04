@@ -130,6 +130,7 @@ layout = html.Main([
                 html.Em("in the world where the ad was shown"),
                 ".",
             ]),
+
             html.Li([
                 html.Strong(["Control model μ̂", html.Sub("0"), "(x)"]),
                 " — trained only on users who did not see the ad. It learns the same relationship ",
@@ -371,6 +372,7 @@ layout = html.Main([
                 "least a reasonable classifier before we subtract their outputs. It is not a direct "
                 "uplift metric.",
             ]),
+
             html.Li([
                 html.Strong("Uplift-by-Bin Plot"),
                 " — splits test users into equal-sized bins by predicted uplift rank and plots "
@@ -378,6 +380,7 @@ layout = html.Main([
                 "(deciles) as a standard choice. A good model produces a monotonically decreasing "
                 "curve — the top bin has the highest actual incremental conversion rate.",
             ]),
+
             html.Li([
                 html.Strong("Qini Curve"),
                 " — the primary evaluation metric. It plots cumulative incremental conversions "
