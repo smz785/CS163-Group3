@@ -3,8 +3,8 @@
 
 A multi-page interactive web application for causal analysis of the [Criteo Uplift v2.1 dataset](https://ailab.criteo.com/criteo-uplift-modeling-dataset/). The app evaluates the incremental effectiveness of online advertising using uplift modeling, with a focus on heterogeneous treatment effects and targeting efficiency.
 
-**Live App →** `https://your-app-id.uw.r.appspot.com` *(update with your deployed URL)*
-
+**Live App →** `https://cs163-group-3.wl.r.appspot.com` 
+**Inference API →** `https://uplift-api-929926879239.us-west2.run.app/predict`
 ---
 
 ## Table of Contents
@@ -16,6 +16,7 @@ A multi-page interactive web application for causal analysis of the [Criteo Upli
 - [Data Pipeline](#data-pipeline)
 - [App Pages](#app-pages)
 - [Deployment](#deployment)
+- [Inference Service](#inference-service)
 - [Team](#team)
 
 ---
@@ -43,7 +44,7 @@ Key findings from the analysis:
 CS163test/
 ├── app.py                  # Dash app entry point, shared layout, nav
 ├── data_store.py           # GCS data loaders with lru_cache
-├── Dockerfile              # Container definition
+├── Dockerfile              # Container definition (web app)
 ├── app.yaml                # Google App Engine configuration
 ├── requirements.txt        # Python dependencies
 ├── .dockerignore           # Files excluded from Docker image
@@ -55,6 +56,15 @@ CS163test/
 │   ├── methods.py          # Methodology: T-learner, Qini, policy eval
 │   ├── EDA.py              # Exploratory data analysis with live charts
 │   └── preliminary_results.py  # ML results: decile uplift, Qini curve, policy table
+│
+├── uplift_service/         # ML inference API (NEW)
+│   ├── app.py              # FastAPI inference service (/predict endpoint)
+│   ├── Dockerfile          # Container for inference API (Cloud Run)
+│   ├── requirements.txt    # API dependencies
+│   └── models/             # Saved trained model artifacts
+│       ├── model_treated.pkl
+│       ├── model_control.pkl
+│       └── feature_cols.pkl
 │
 └── assets/
     └── style.css           # Global styles
@@ -75,7 +85,8 @@ CS163test/
 | **Serving** | Gunicorn + Flask (via Dash) |
 | **Deployment** | Google App Engine (Standard, Python 3.10) |
 | **Containerization** | Docker |
-
+| **Inference API** | FastAPI |
+| **Cloud Inference** | Google Cloud Run |
 ---
 
 ## Getting Started
@@ -248,6 +259,42 @@ Visit `http://localhost:8080`.
 
 ---
 
+## Inference Service
+
+This project includes a Dockerized ML inference service deployed on Google Cloud Run. The service exposes the trained uplift model through a REST API, allowing new user feature inputs to receive real-time uplift predictions.
+
+### Live Endpoint
+
+```text
+POST https://uplift-api-929926879239.us-west2.run.app/predict
+
+## Example Request
+curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
+-H "Content-Type: application/json" \
+-d '{
+  "f0":25.516106,
+  "f1":10.059654,
+  "f2":9.039079,
+  "f3":4.679882,
+  "f4":10.280525,
+  "f5":4.115453,
+  "f6":-13.293861,
+  "f7":4.833815,
+  "f8":3.88265,
+  "f9":13.190056,
+  "f10":5.300375,
+  "f11":-0.168679
+}'
+
+## Example Response
+{
+  "p_treated": 0.081558,
+  "p_control": 0.087148,
+  "uplift_score": -0.00559,
+  "recommend_show_ad": false,
+  "segment": "Lost Cause"
+}
+
 ## Team
 
 **CS 163 — Group 3 · Spring 2026**
@@ -256,7 +303,7 @@ Visit `http://localhost:8080`.
 |---|---|
 | Syed Zain | [@syedzain](https://github.com/syedzain) |
 | Ayman | [@ayman](https://github.com/ayman) |
-| Thang | [@thang](https://github.com/thang) |
+| Thang | [@thang](https://github.com/thang-cao13) |
 
 *(update with actual GitHub handles)*
 
