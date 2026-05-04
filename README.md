@@ -206,8 +206,8 @@ App startup
 | Overview | `/` | Project motivation and summary of findings |
 | Dataset | `/dataset` | Schema, size, class imbalance, variable definitions |
 | Methods | `/methods` | T-Learner methodology, Qini coefficient, policy evaluation |
-| Analytics | `/analytics` | EDA: funnel analysis, lift, correlation heatmap, PCA |
-| Preliminary Results | `/preliminary_results` | ML results across 3 hypotheses with Qini curve and policy tables |
+| EDA | `/analytics` | EDA: funnel analysis, lift, correlation heatmap, PCA |
+| Findings | `/preliminary_results` | ML results across 3 hypotheses with Qini curve and policy tables |
 
 ---
 
