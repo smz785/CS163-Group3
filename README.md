@@ -269,22 +269,23 @@ This project includes a Dockerized ML inference service deployed on Google Cloud
 POST https://uplift-api-929926879239.us-west2.run.app/predict
 
 ## Example Request
-```
+
+```bash
 curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 -H "Content-Type: application/json" \
 -d '{
-  "f0":25.516106,
-  "f1":10.059654,
-  "f2":9.039079,
-  "f3":4.679882,
-  "f4":10.280525,
-  "f5":4.115453,
-  "f6":-13.293861,
-  "f7":4.833815,
-  "f8":3.88265,
-  "f9":13.190056,
-  "f10":5.300375,
-  "f11":-0.168679
+  "f0": 25.516106,
+  "f1": 10.059654,
+  "f2": 9.039079,
+  "f3": 4.679882,
+  "f4": 10.280525,
+  "f5": 4.115453,
+  "f6": -13.293861,
+  "f7": 4.833815,
+  "f8": 3.88265,
+  "f9": 13.190056,
+  "f10": 5.300375,
+  "f11": -0.168679
 }'
 
 ## Example Response
