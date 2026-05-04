@@ -296,8 +296,6 @@ curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 }
 ---
 
-```md
-
 ## Team
 
 **CS 163 — Group 3 · Spring 2026**
