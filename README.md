@@ -308,7 +308,7 @@ curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 
 |------|--------|
 
-| Syed Zain | [@syedzain](https://github.com/syedzain) |
+| Syed Zain | [@syedzain]((https://github.com/smz785)) |
 
 | Ayman | [@ayman](https://github.com/ayman) |
 
