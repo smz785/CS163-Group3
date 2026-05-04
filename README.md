@@ -4,7 +4,7 @@
 A multi-page interactive web application for causal analysis of the [Criteo Uplift v2.1 dataset](https://ailab.criteo.com/criteo-uplift-modeling-dataset/). The app evaluates the incremental effectiveness of online advertising using uplift modeling, with a focus on heterogeneous treatment effects and targeting efficiency.
 
 **Live App →** `https://cs163-group-3.wl.r.appspot.com`  
-**Inference API →** `[https://uplift-api-929926879239.us-west2.run.app/predict](https://uplift-api-929926879239.us-west2.run.app/docs#/default/predict_predict_post)`
+**Inference API →** `(https://uplift-api-929926879239.us-west2.run.app/docs#/default/predict_predict_post)`
 ---
 
 ## Table of Contents
