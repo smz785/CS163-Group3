@@ -1,5 +1,19 @@
 # Criteo Uplift Data Modeling and Analysis
 ### CS 163 — Group 3 · Spring 2026
+## Team
+
+**CS 163 — Group 3 · Spring 2026**
+
+| Name | GitHub |
+
+|------|--------|
+
+| Syed Zain | [@syedzain](https://github.com/syedzain) |
+
+| Ayman | [@ayman](https://github.com/ayman) |
+
+| Thang | [@thang-cao13](https://github.com/thang-cao13) |
+
 
 A multi-page interactive web application for causal analysis of the [Criteo Uplift v2.1 dataset](https://ailab.criteo.com/criteo-uplift-modeling-dataset/). The app evaluates the incremental effectiveness of online advertising using uplift modeling, with a focus on heterogeneous treatment effects and targeting efficiency.
 
@@ -269,6 +283,7 @@ This project includes a Dockerized ML inference service deployed on Google Cloud
 POST https://uplift-api-929926879239.us-west2.run.app/predict
 
 ## Example Request
+```bash
 curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 -H "Content-Type: application/json" \
 -d '{
@@ -287,6 +302,7 @@ curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 }'
 
 ## Example Response
+```json
 {
   "p_treated": 0.081558,
   "p_control": 0.087148,
@@ -311,5 +327,3 @@ curl -X POST "https://uplift-api-929926879239.us-west2.run.app/predict" \
 | Thang | [@thang-cao13](https://github.com/thang-cao13) |
 
 ---
-
-*Built with Plotly Dash · Deployed on Google App Engine · Data from Criteo AI Lab*
