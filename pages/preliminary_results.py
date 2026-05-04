@@ -1,10 +1,10 @@
 import dash
-from dash import html, dcc
+from dash import html, dcc, dash_table
 import plotly.graph_objects as go
 import pandas as pd
 from data_store import get_precomputed
 
-dash.register_page(__name__, path='/preliminary_results', name='Preliminary Results')
+dash.register_page(__name__, path='/preliminary_results', name='Findings')
 
 # ── Load precomputed results (from full 14M row analysis) ─────────
 precomputed = get_precomputed()
@@ -134,14 +134,37 @@ layout = html.Div([
     # ── Hypothesis 1 ─────────────────────────────────────────────
     html.Section([
         html.H2("Hypothesis 1: Advertising Impact Across Funnel Stages"),
-        html.Div([
-            metric_card("Visit Rate — Control",      f"{v0:.2f}%"),
-            metric_card("Visit Rate — Treated",      f"{v1:.2f}%", f"ATE: +{ate_visit:.3f} pp"),
-            metric_card("Conversion Rate — Control", f"{c0:.2f}%"),
-            metric_card("Conversion Rate — Treated", f"{c1:.2f}%", f"ATE: +{ate_conv:.3f} pp"),
-            metric_card("Conv | Visit — Control",    f"{cv0:.2f}%"),
-            metric_card("Conv | Visit — Treated",    f"{cv1:.2f}%", f"ATE: +{ate_cv:.3f} pp"),
-        ], className='metric-grid'),
+        dash_table.DataTable(
+            columns=[
+                {"name": "Metric", "id": "metric"},
+                {"name": "Control", "id": "control"},
+                {"name": "Treated", "id": "treated"},
+                {"name": "ATE", "id": "ate"},
+            ],
+            data=[
+                {"metric": "Visit Rate", "control": f"{v0:.2f}%", "treated": f"{v1:.2f}%",
+                 "ate": f"+{ate_visit:.3f} pp"},
+                {"metric": "Conversion Rate", "control": f"{c0:.2f}%", "treated": f"{c1:.2f}%",
+                 "ate": f"+{ate_conv:.3f} pp"},
+                {"metric": "Conv | Visit", "control": f"{cv0:.2f}%", "treated": f"{cv1:.2f}%",
+                 "ate": f"+{ate_cv:.3f} pp"},
+            ],
+            style_table={"width": "100%", "marginBottom": "20px"},
+            style_header={
+                "backgroundColor": "#2c3e50",
+                "color": "white",
+                "fontWeight": "bold",
+                "textAlign": "center",
+            },
+            style_cell={
+                "textAlign": "center",
+                "padding": "10px",
+                "fontFamily": "sans-serif",
+            },
+            style_data_conditional=[
+                {"if": {"row_index": "odd"}, "backgroundColor": "#f9f9f9"},
+            ],
+        ),
         dcc.Graph(figure=fig_funnel),
         html.H3("Key Insight"),
         html.P(
@@ -170,20 +193,45 @@ layout = html.Div([
             "This can inflate engagement metrics without improving revenue.",
             "Excessive ad exposure without meaningful value may degrade user experience and trust.",
         ]),
+        html.H3("Model Evaluation"),
+        html.P(
+            "Before using the models for uplift, we evaluate whether each model can classify conversions within its own group. "
+            "ROC AUC measures how well the model ranks converters above non-converters."
+        ),
+        html.H3("AUC interpretation:"),
+        html.Ul([
+            html.Li("0.50 = random ranking"),
+            html.Li("0.60–0.70 = weak/moderate signal"),
+            html.Li("0.70+ = stronger classification ability")
+        ]),
+        html.P(
+            "Because conversion is rare, AUC is more useful than accuracy. "
+        ),
+        html.Img(
+            src="/assets/ROC Curve For Treated and Control.png",
+            style={'width': '100%','maxWidth': '700px', 'margin-left': 'auto'}
+        ),
+        html.H3('Explanation'),
+        html.P(
+            "Both treated and control models achieve high AUC (~0.96), indicating strong ability to distinguish converters from non-converters. "
+            "The curves are well above the random baseline, showing that the models capture meaningful patterns. "
+            "This validates that the models are suitable for uplift estimation."
+        )
+
     ], className='result-section'),
 
     # ── Hypothesis 2 ─────────────────────────────────────────────
     html.Section([
         html.H2("Hypothesis 2: Heterogeneous Treatment Effects"),
         html.P(
-            "The uplift-by-decile analysis reveals that advertising effectiveness varies substantially "
-            "across user segments. The highest predicted uplift group (Decile 1) achieves a realized "
-            "uplift approximately five times larger than the overall average treatment effect."
+            "We assign each user an uplift score, which measures how much showing an ad is expected to increase their chance of converting. "
+            "We then rank users from highest to lowest uplift and divide them into five groups (bins), such as the top 20%, next 20%, and so on. "
+
         ),
         html.P(
-            "In contrast, most deciles show uplift values close to zero, indicating that for the "
-            "majority of users, advertising has little to no effect. A small segment even exhibits "
-            "slightly negative uplift, suggesting advertising may be counterproductive for some users."
+            "The idea is that users in the top group should benefit the most from advertising. "
+            "So ideally, we expect the top 20% group to have the highest increase in conversion due to ads, and for this effect to gradually decrease as we move to lower-ranked groups. "
+
         ),
         html.H3("What the T-Learner Does"),
         html.P(
@@ -194,14 +242,11 @@ layout = html.Div([
         ),
         dcc.Graph(figure=fig_decile),
         callout(
-            "Key Insight: The impact of advertising is not uniform. It is highly concentrated in a "
-            "small subset of users — commonly referred to as 'persuadables'."
+            "Key Insight: The first group (Bin 1) has the highest uplift, which shows that the model is able to find users who are more influenced by advertising. "
+            "In general, users in higher-ranked bins tend to have higher uplift than those in lower bins.  "
+            "However, the pattern is not perfectly ordered, since some middle groups have higher uplift than expected. "
+            "This means the model is not perfect, but it still captures useful differences between users."
         ),
-        insight_box("Next Steps", [
-            "Improve model stability and ranking consistency.",
-            "Explore alternative uplift methods (e.g., X-learner, DR-learner).",
-            "Analyze feature importance to better understand drivers of high uplift.",
-        ]),
         insight_box("Broader Impacts", [
             "Segment-based targeting can significantly improve efficiency but must be implemented carefully.",
             "Over-targeting specific groups may introduce bias or unequal exposure.",

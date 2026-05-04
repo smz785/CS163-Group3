@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from data_store import get_df
 
-dash.register_page(__name__, name='Analytics', path='/analytics')
+dash.register_page(__name__, name='EDA', path='/analytics')
 
 df = get_df()
 
