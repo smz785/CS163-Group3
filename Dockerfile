@@ -13,6 +13,7 @@ COPY pages/ ./pages/
 COPY assets/ ./assets/
 COPY precomputed/ ./precomputed/
 
+
 EXPOSE 8080
 
 CMD ["gunicorn", "-b", "0.0.0.0:8080", "--timeout", "300", "app:server"]
