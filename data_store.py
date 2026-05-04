@@ -53,7 +53,7 @@ def get_precomputed():
             "visit_rate": load_series("precomputed/visit_rate.csv"),
             "conversion_rate": load_series("precomputed/conversion_rate.csv"),
             "conv_given_visit": load_series("precomputed/conv_given_visit.csv"),
-            "decile_df": load_df("precomputed/decile_uplift.csv"),
+            "decile_df": load_df("precomputed/decile_table.csv"),
             "qini_tbl": load_df("precomputed/qini_table.csv"),
             "policy_df": load_df("precomputed/policy_table.csv"),
         }
@@ -78,7 +78,7 @@ def get_precomputed():
             "visit_rate": load_local_series("visit_rate.csv"),
             "conversion_rate": load_local_series("conversion_rate.csv"),
             "conv_given_visit": load_local_series("conv_given_visit.csv"),
-            "decile_df": load_local_df("decile_uplift.csv"),
+            "decile_df": load_local_df("decile_table.csv"),
             "qini_tbl": load_local_df("qini_table.csv"),
             "policy_df": load_local_df("policy_table.csv"),
         }

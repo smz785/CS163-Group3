@@ -45,7 +45,7 @@ fig_funnel.update_layout(
 
 # ── Chart 2: Uplift by Decile ─────────────────────────────────────
 deciles     = decile_df['decile'].tolist()
-uplift_vals = decile_df['uplift_pp'].tolist()
+uplift_vals = decile_df['realized_uplift'].tolist()  # was 'uplift_pp'
 bar_colors  = ['#c0392b' if v < 0 else '#2c5f8a' for v in uplift_vals]
 
 fig_decile = go.Figure(data=[
