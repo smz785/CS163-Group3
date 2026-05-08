@@ -5,7 +5,7 @@ automatic_scaling:
   target_cpu_utilization: 0.90
   max_instances: 1
 
-entrypoint: gunicorn -b :$PORT --timeout 120 app:server
+entrypoint: gunicorn -b :$PORT --timeout 300 --workers 1 app:server
 
 env_variables:
   BUCKET_NAME: 'group-3-bucket'

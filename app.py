@@ -12,6 +12,14 @@ from dash import Dash, html, dcc, dash_table, dcc, callback, Output, Input
 app = Dash(__name__, use_pages=True)
 server = app.server
 # Minimal Dash layout so the Dash endpoints are available.
+
+
+@server.route("/_ah/warmup")
+def warmup():
+    # App Engine warmup must be cheap.
+    # Do not load the full dataset here.
+    return "ok", 200
+
 app.layout = html.Div([
 
     html.Header([
@@ -31,6 +39,8 @@ app.layout = html.Div([
     html.Footer("CS 163 - Group 3 • Spring 2026 • Built with HTML & CSS"),
     dash.page_container
 ])
+
+
 
 # Run the app
 if __name__ == '__main__':

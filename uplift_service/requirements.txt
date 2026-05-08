@@ -5,3 +5,4 @@ scikit-learn==1.6.1
 joblib
 pydantic
 numpy==2.2.4
+pyarrow
