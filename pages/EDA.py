@@ -29,7 +29,7 @@ def layout():
     conversion_rate = pre["conversion_rate"]
     conv_given_visit = pre["conv_given_visit"]
     corr_df = pre["corr"]
-    pca_sample = pre["pca_sample"]
+    pca_sample = pre["pca_df"]
 
     required_ok = not (
         visit_rate.empty
@@ -116,8 +116,8 @@ def layout():
     ):
         fig_pca = px.scatter(
             pca_sample,
-            x="f0",
-            y="f1",
+            x="PC1",
+            y="PC2",
             color=pca_sample["conversion"].astype(str),
             labels={"color": "Conversion"},
             title="Precomputed Feature Projection Sample Colored by Conversion",

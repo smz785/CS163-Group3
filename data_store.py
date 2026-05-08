@@ -41,109 +41,73 @@ def _read_local_series(filename: str) -> pd.Series:
 
 
 @functools.lru_cache(maxsize=1)
-def get_df(sample_rows: int | None = None) -> pd.DataFrame:
-    """
-    Heavy raw-data loader.
-
-    Do not call this during process startup.
-    In production, prefer get_precomputed().
-    """
-
+def get_df():
     try:
-        print(f"loading data from gcs://{BUCKET_NAME}/{FILE_NAME}", flush=True)
-
+        print(f"Loading dataset from gs://{BUCKET_NAME}/{FILE_NAME}")
         client = storage.Client()
         bucket = client.bucket(BUCKET_NAME)
         blob = bucket.blob(FILE_NAME)
-
-        columns = [
-            "treatment",
-            "visit",
-            "conversion",
-            "exposure",
-            "f0",
-            "f1",
-            "f2",
-            "f3",
-            "f4",
-            "f5",
-            "f6",
-            "f7",
-            "f8",
-            "f9",
-            "f10",
-            "f11",
-        ]
-
-        with blob.open("rb") as f:
-            df = pd.read_parquet(f, columns=columns)
-
-        if sample_rows is not None and len(df) > sample_rows:
-            return df.sample(sample_rows, random_state=42)
-
-        return df
+        data = blob.download_as_bytes()
+        return pd.read_parquet(BytesIO(data))
 
     except Exception as e:
-        print(f"GCS dataset load failed: {e}", flush=True)
-        return pd.DataFrame()
-
+        raise RuntimeError(
+            f"Failed to load full dataset from gs://{BUCKET_NAME}/{FILE_NAME}. "
+            "Check bucket name, object path, Cloud Run service account permissions, "
+            "or local Google credentials."
+        ) from e
 
 @functools.lru_cache(maxsize=1)
-def get_precomputed() -> dict:
-    """
-    Lightweight production loader.
-
-    These CSV files are small and safe to cache.
-    Falls back to local ./precomputed files when GCS is unavailable.
-    """
-
+def get_precomputed():
     try:
-        print(
-            f"loading precomputed results from gcs://{BUCKET_NAME}/precomputed/",
-            flush=True
-        )
-
+        print(f"Loading precomputed files from gs://{BUCKET_NAME}/precomputed/")
         client = storage.Client()
         bucket = client.bucket(BUCKET_NAME)
 
-        def load_df(filename: str) -> pd.DataFrame:
+        def load_series(filename):
+            blob = bucket.blob(f"precomputed/{filename}")
+            data = blob.download_as_bytes()
+            return pd.read_csv(BytesIO(data), index_col=0).squeeze()
+
+        def load_df(filename):
             blob = bucket.blob(f"precomputed/{filename}")
             data = blob.download_as_bytes()
             return pd.read_csv(BytesIO(data))
-
-        def load_series(filename: str) -> pd.Series:
-            df = load_df(filename)
-
-            if df.empty:
-                return pd.Series(dtype=float)
-
-            return pd.Series(df.iloc[:, 1].values, index=df.iloc[:, 0].values)
 
         return {
             "visit_rate": load_series("visit_rate.csv"),
             "conversion_rate": load_series("conversion_rate.csv"),
             "conv_given_visit": load_series("conv_given_visit.csv"),
-            "corr": load_df("corr.csv"),
-            "pca_sample": load_df("pca_sample.csv"),
             "decile_df": load_df("decile_table.csv"),
             "qini_tbl": load_df("qini_table.csv"),
             "policy_df": load_df("policy_table.csv"),
+            "pca_df": load_df("pca_df.csv"),
+            "corr": load_df("corr.csv"),
         }
 
     except Exception as e:
-        print(
-            "GCS precomputed load failed. Falling back to local precomputed files.",
-            flush=True
-        )
-        print(e, flush=True)
+        print("GCS precomputed load failed. Falling back to local precomputed files.")
+        print(e)
+
+        def load_local_series(filename):
+            path = os.path.join("precomputed", filename)
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"Missing local fallback file: {path}")
+            return pd.read_csv(path, index_col=0).squeeze()
+
+        def load_local_df(filename):
+            path = os.path.join("precomputed", filename)
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"Missing local fallback file: {path}")
+            return pd.read_csv(path)
 
         return {
-            "visit_rate": _read_local_series("visit_rate.csv"),
-            "conversion_rate": _read_local_series("conversion_rate.csv"),
-            "conv_given_visit": _read_local_series("conv_given_visit.csv"),
-            "corr": _read_local_csv("corr.csv"),
-            "pca_sample": _read_local_csv("pca_sample.csv"),
-            "decile_df": _read_local_csv("decile_table.csv"),
-            "qini_tbl": _read_local_csv("qini_table.csv"),
-            "policy_df": _read_local_csv("policy_table.csv"),
+            "visit_rate": load_local_series("visit_rate.csv"),
+            "conversion_rate": load_local_series("conversion_rate.csv"),
+            "conv_given_visit": load_local_series("conv_given_visit.csv"),
+            "decile_df": load_local_df("decile_table.csv"),
+            "qini_tbl": load_local_df("qini_table.csv"),
+            "policy_df": load_local_df("policy_table.csv"),
+            "pca_df": load_local_df("pca_df.csv"),
+            "corr": load_local_df("corr.csv"),
         }
