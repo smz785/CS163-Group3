@@ -154,7 +154,7 @@ CS163-Group3/
 
 The **website** (App Engine) is the central hub. On startup it pulls the full 14M-row Parquet file and six precomputed CSVs from **Google Cloud Storage** using the `google-cloud-storage` SDK, caching everything in RAM for the lifetime of the instance. Every page in the dashboard reads directly from those in-memory DataFrames — no database queries at request time.
 
-When a user visits the Findings page, the app makes a `POST /predict` HTTP request to the **Cloud Run inference API**, passing 12 user feature values. The API returns an uplift score and segment label that the page renders live. The inference API is completely stateless — the trained model `.pkl` files are baked into its Docker image at build time, so it never needs to reach GCS.
+When a user visits, the app makes a `POST /predict` HTTP request to the **Cloud Run inference API**, passing 12 user feature values. The API returns an uplift score and segment label that the page renders live. The inference API is completely stateless — the trained model `.pkl` files are baked into its Docker image at build time, so it never needs to reach GCS.
 
 The **CI/CD pipeline** (GitHub → Cloud Build → Artifact Registry → Cloud Run) handles all inference API deployments: any push to `main` automatically builds a new Docker image and redeploys the Cloud Run service with zero manual steps.
 
