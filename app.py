@@ -33,7 +33,7 @@ app.layout = html.Div([
         dcc.Link("Dataset", href='/dataset'),
         dcc.Link("Methods", href="/methods"),
         dcc.Link("EDA", href="/analytics"),
-        dcc.Link("Findings", href="preliminary_results")
+        dcc.Link("Findings", href="/preliminary_results")
     ]),
 
     html.Footer("CS 163 - Group 3 • Spring 2026 • Built with HTML & CSS"),
